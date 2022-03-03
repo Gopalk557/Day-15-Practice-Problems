@@ -8,8 +8,8 @@ namespace Day_15_Practice_Problems
 {
     public class MyMapNode<K, V>
     {
-        private readonly int size;
-        private readonly LinkedList<KeyValue<K, V>>[] items;
+        private int size;
+        private LinkedList<KeyValue<K, V>>[] items;
 
         public MyMapNode(int size)
         {
@@ -17,13 +17,24 @@ namespace Day_15_Practice_Problems
             this.items = new LinkedList<KeyValue<K, V>>[size];
         }
 
-        protected int GetArrayPosition(K key)
+        public LinkedList<KeyValue<K, V>> GetLinkedList(int position)
+        {
+            LinkedList<KeyValue<K, V>> linkedList = items[position];
+            if (linkedList == null)
+            {
+                linkedList = new LinkedList<KeyValue<K, V>>();
+                items[position] = linkedList;
+            }
+            return linkedList;
+        }
+
+        public int GetArrayPosition(K key)
         {
             int position = key.GetHashCode() % size;
             return Math.Abs(position);
         }
 
-        public V Get(K key)
+        public V GetElement(K key)
         {
             int position = GetArrayPosition(key);
             LinkedList<KeyValue<K, V>> linkedList = GetLinkedList(position);
@@ -45,6 +56,8 @@ namespace Day_15_Practice_Problems
             KeyValue<K, V> items = new KeyValue<K, V>() { Key = key, Value = value };
             linkedList.AddLast(items);
         }
+
+
         public void Remove(K key)
         {
             int position = GetArrayPosition(key);
@@ -66,21 +79,11 @@ namespace Day_15_Practice_Problems
 
         }
 
-        protected LinkedList<KeyValue<K, V>> GetLinkedList(int position)
-        {
-            LinkedList<KeyValue<K, V>> linkedList = items[position];
-            if (linkedList == null)
-            {
-                linkedList = new LinkedList<KeyValue<K, V>>();
-                items[position] = linkedList;
-            }
-            return linkedList;
-        }
-
-        public struct KeyValue<K, V>
+        public struct KeyValue<k, v>
         {
             public K Key { get; set; }
             public V Value { get; set; }
         }
+
     }
 }
